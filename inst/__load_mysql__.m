@@ -1,0 +1,68 @@
+## Copyright (C) 2026 John Donoghue
+##  
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License as
+## published by the Free Software Foundation; either version 3 of the
+## License, or (at your option) any later version.
+##      
+## This program is distributed in the hope that it will be useful, but
+## WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+## General Public License for more details.
+##      
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, see
+## <http:##www.gnu.org/licenses/>.
+          
+## -*- texinfo -*-
+## @deftypefn {} {} __load_mysql__ ()
+## Undocumented internal function of mysql package.
+## @end deftypefn
+        
+## PKG_ADD: __load_mysql__ ();
+
+function __load_mysql__ ()
+  # on package load, attempt to load docs
+  try
+    pkg_dir = fileparts (fullfile (mfilename ("fullpath")));
+    doc_file = fullfile (pkg_dir, "doc", "octave-mysql.qch");
+    doc_file = strrep (doc_file, '\', '/');
+    if exist(doc_file, "file")
+      if exist("__event_manager_register_documentation__")
+        __event_manager_register_documentation__ (doc_file);
+      elseif exist("__event_manager_register_doc__")
+        __event_manager_register_doc__ (doc_file);
+      endif
+    endif
+  catch
+    # do nothing
+  end_try_catch
+
+  try
+    if exist ("table") == 0
+      # no table stuff loaded yet
+      p = {};
+      
+      # attempt to load tabilicious, or datatypes if can
+      # we are doing this currently to make using tablicious and datatypes and sqlite as an
+      # optional requirement to get a table datatype
+      x = pkg("list", "tablicious", "datatypes", "sqlite");
+
+      if !isempty(x)
+        # any loaded already ?
+        for idx=1:length(x)
+          if x{idx}.loaded == 1
+            x{1} = x{idx};
+            break;
+          endif
+        endfor
+        # not loaded, then load
+        if x{1}.loaded == 0
+          pkg("load", x{1}.name);
+        endif
+      endif
+    endif
+  catch
+    # do nothing
+  end_try_catch
+endfunction

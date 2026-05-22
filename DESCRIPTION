@@ -1,0 +1,15 @@
+Name: mysql
+Version: 0.0.1
+Date: 2026-05-22
+Author: John Donoghue <john.donoghue@ieee.org>
+Maintainer: John Donoghue <john.donoghue@ieee.org>
+Title: Octave MySQL Toolkit
+Description: Basic Octave implementation of MySQL toolkit
+Categories: Database
+Depends: octave (>= 6.0.0)
+BuildRequires: libmysqlclient-dev
+SystemRequirements: libmysqlclient
+License: GPLv3+
+Url: https://gnu-octave.github.io/octave-mysql/
+Repository: https://github.com/gnu-octave/octave-mysql/
+Tracker: https://github.com/gnu-octave/octave-mysql/issues
