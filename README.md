@@ -38,6 +38,20 @@ After installation, load the package in order to use it.
 
 **Note:** The package needs to loaded each time Octave is run in order to use the package. 
 
+## Running Tests
+
+The toolkit contains a number of built in tests that can be run using
+
+    pkg test mysql
+
+Note that it expects a test database running locally and matching examples
+with a database name of MySQLNative, user "root", password "matlab".
+
+If the database doesnt exist, or different credentials are needed, the built-in
+tests will fail.
+
+The tests may change data within this database.
+
 ## Documentation
 
 On newer versions of Octave, on loading the package the documentation will be available in the
