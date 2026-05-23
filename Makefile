@@ -148,7 +148,7 @@ clean-tarballs:
 ##      the original working directory.
 
 $(release_tarball): $(release_stamp)
-	$(TAR) -cf - $(TAR_OPTIONS) -C "$(target_dir)/" "$(notdir $<)" | gzip -9n > "$@"
+	$(TAR) -cf - $(TAR_OPTIONS) -C "$(target_dir)/" "$(notdir $(release_dir))" | gzip -9n > "$@"
 
 $(release_stamp): $(release_dir_dep)
 	#-$(RM) -r "$@"
@@ -176,7 +176,7 @@ ifneq (,$(wildcard src/configure))
 endif
 ifneq (,$(wildcard doc/mkfuncdocs.py))
 	$(MAKE) -C "$(release_dir)" docs
-	cd "$(release_dir)" && $(RM) -f doc/mkfuncdocs.py doc/mkqhcp.py
+	#cd "$(release_dir)" && $(RM) -f doc/mkfuncdocs.py doc/mkqhcp.py
 endif
 ifneq (,$(wildcard doc/mkdoccache.m))
 	$(MAKE) -C "$(release_dir)" doc-cache
