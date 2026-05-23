@@ -17,7 +17,7 @@
 ## -*- texinfo -*- 
 ## @deftypefn {} {@var{conn} =} mysql (@var{dbname}, @var{username}, @var{password})
 ## @deftypefnx {} {@var{conn} =} mysql (@var{username}, @var{password}, @var{propertyname}, @var{propertyvalue} @dots{})
-## Create an MySQL database connection
+## Create a MySQL database connection
 ##
 ## @subsubheading Inputs
 ## @table @code
@@ -50,7 +50,7 @@
 ## @end table
 ##
 ## @subsubheading Examples
-## Open a a connection to a MySQL Database "MySQLNative", using username/password root/matlab
+## Open a connection to a MySQL Database "MySQLNative", using username/password root/matlab
 ## @example
 ## @code {
 ## db = mysql("MySQLNative", "root", "matlab");

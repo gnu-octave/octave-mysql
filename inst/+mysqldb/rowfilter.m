@@ -38,7 +38,7 @@ classdef rowfilter
   ## Object properties are the names of the columns on creation of the filter.
   ##
   ## Constraints can be set on a specific field of the filter by setting a
-  ## comparison value for the variable name.
+  ## comparison value for the variable.
   ##
   ## @subsubheading Examples
   ## @example

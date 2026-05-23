@@ -29,7 +29,7 @@ classdef connection < handle
   ## @item Message
   ## Readonly last error message
   ## @item Type
-  ## 'MYSQL Connection Object'
+  ## 'MySQL Connection Object'
   ## @item AutoCommit
   ## Boolean for control of commit to database
   ## @item LoginTimeout
@@ -46,7 +46,7 @@ classdef connection < handle
     DataSource = ''; # DataSource value
     UserName = '';   # Username
     Message = '';    # Last message from database access
-    Type = 'MYSQL Connection Object'; # connection type
+    Type = 'MySQL Connection Object'; # connection type
 
     LoginTimeout = 0;
   endproperties
@@ -64,7 +64,7 @@ classdef connection < handle
     function this = connection (varargin)
       ## -*- texinfo -*-
       ## @deftypefn {} {@var{conn} =} mysql (@var{varargs})
-      ## MYSQL connection constructor
+      ## MySQL connection constructor
       ## @end deftypefn
 
       if nargin < 3
@@ -847,7 +847,7 @@ classdef connection < handle
       ## @item @var{db}
       ## Previously created database connection object
       ## @item @var{sqlquery}
-      ## A valid non selecting SQL query string
+      ## A valid non-selecting SQL query string
       ## @end table
       ##
       ## @subsubheading Outputs
@@ -860,7 +860,7 @@ classdef connection < handle
       ## # create sql connection
       ## db =  mysql("MySQLNative", "root", "matlab");
       ## # create table and then insert a row
-      ## execute(db, 'CREATE TABLE Test (Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT)');
+      ## execute(db, 'CREATE TABLE Test (Id INTEGER PRIMARY KEY AUTO INCREMENT, Name TEXT)');
       ## execute(db, 'INSERT INTO Test (Name) VALUES ("Line1")');
       ## }
       ## @end example
@@ -884,7 +884,7 @@ classdef connection < handle
       ## @item @var{conn}
       ##  currently open database.
       ## @item @var{tablename}
-      ##  Name of a table with the database.
+      ##  Name of a table within the database.
       ## @item @var{propertyname}, @var{propertyvalue}
       ##  property name/value pairs where known properties are:
       ##  @table @asis
@@ -1084,9 +1084,9 @@ classdef connection < handle
       ## @item @var{tablename}
       ## Name of table to write data to
       ## @item @var{data}
-      ## Table containing or struct data to write to the database. Variables names are expected to match the database.
+      ## Table or struct containing data to write to the database. Variables names are expected to match the database.
       ## @item @var{filter}
-      ## A Filter object  or cell array of filter objects used to determine which rows of the table to update.
+      ## A Filter object or cell array of filter objects used to determine which rows of the table to update.
       ## @item @var{propertyname}, @var{propertyvalue}
       ##  property name/value pairs where known properties are:
       ##  @table @asis
@@ -1167,7 +1167,7 @@ classdef connection < handle
       ## @item @var{conn}
       ##  currently open database connection.
       ## @item @var{pattern}
-      ##  Name or pattern to match table in database. Use '' to match match all tables.
+      ##  Name or pattern to match table in database. Use '' to match all tables.
       ## @item @var{propertyname}, @var{propertyvalue}
       ##  property name/value pairs where known properties are:
       ##  @table @asis
@@ -1388,7 +1388,7 @@ endclassdef
 
 %!xtest
 %! assert(isopen(db))
-%! assert(db.Type, 'MYSQL Connection Object');
+%! assert(db.Type, 'MySQL Connection Object');
 
 %!xtest
 %! # test sqlread - using structure return format to ensure we know what we are getting

@@ -71,7 +71,7 @@ To download a copy of the @acronym{GNU} Octave MySQL package, please visit
 @node Top
 @top Introduction
 The Octave MySQL toolkit is a set of MySQL routines for GNU Octave
-intended to mimic the interface of the Matlab Native MySQL functionality.
+intended to mimic the interface of the MATLAB Native MySQL functionality.
 @end ifnottex
 
 @menu
@@ -90,12 +90,12 @@ intended to mimic the interface of the Matlab Native MySQL functionality.
 The toolkit must be installed and then loaded to be used.
 
 It can be installed in @acronym{GNU} Octave directly from the website,
-or can be installed in an off-line mode via a downloaded tarball.
+or can be installed in an offline mode via a downloaded tarball.
 
 The toolkit has a dependency on the mysql-client or mariadb-client library, so it must be installed in order
 to successfully install the toolkit.
 
-The toolkit must be then be loaded once per each @acronym{GNU} Octave session in order to use its functionality.
+The toolkit must then be loaded once for each @acronym{GNU} Octave session in order to use its functionality.
 
 @section Online Direct install
 @cindex Online install
@@ -115,8 +115,8 @@ pkg install -forge mysql
 
 The latest released version of the toolkit will be downloaded and installed.
 
-@section Off-line install
-@cindex Off-line install
+@section Offline install
+@cindex Offline install
 With the toolkit package already downloaded, and in the current directory when running
 @acronym{GNU} Octave, the package can be installed using the following command within @acronym{GNU} Octave:
 
