@@ -27,7 +27,7 @@
 ## Username for connecting to database.
 ## @item @var{password}
 ## Password for connecting to database.
-## @item @var{ppropertyname}, @var{propertyvalue}
+## @item @var{propertyname}, @var{propertyvalue}
 ## Property names and values
 ## @end table
 ##

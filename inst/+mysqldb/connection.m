@@ -141,7 +141,7 @@ classdef connection < handle
     function delete (this)
       ## -*- texinfo -*-
       ## @deftypefn {} {} delete (@var{conn})
-      ## ODCB connection deconstructor
+      ## mysql connection deconstructor
       ## @end deftypefn
 
       try
@@ -154,7 +154,7 @@ classdef connection < handle
     function Y = isopen (this)
       ## -*- texinfo -*-
       ## @deftypefn {} {@var{T} =} isopen (@var{conn})
-      ## Return true if ODCB connection is open
+      ## Return true if mysql connection is open
       ## @end deftypefn
 
       Y = ! isempty(this.dbhandle);
@@ -163,7 +163,7 @@ classdef connection < handle
     function close (this)
       ## -*- texinfo -*-
       ## @deftypefn {} {} close (@var{conn})
-      ## close ODCB connection
+      ## close mysql connection
       ## @end deftypefn
 
       if !isempty(this.dbhandle)
@@ -177,16 +177,16 @@ classdef connection < handle
     
     function data = sqlouterjoin (this, lefttable, righttable, varargin)
       ## -*- texinfo -*-
-      ## @deftypefn {} {@var{data} =} sqlouterjoin (@var{db}, @var{lefttablename}, @var{righttablename})
-      ## @deftypefnx {} {@var{data} =} sqlouterjoin (@var{db}, @var{lefttablename}, @var{righttablename}, "Keys", @var{keys}, @dots{})
-      ## @deftypefnx {} {@var{data} =} sqlouterjoin (@var{db}, @var{lefttablename}, @var{righttablename}, "LeftKeys", @var{keys}, "RightKeys", @var{keys}, @dots{})
+      ## @deftypefn {} {@var{data} =} sqlouterjoin (@var{conn}, @var{lefttablename}, @var{righttablename})
+      ## @deftypefnx {} {@var{data} =} sqlouterjoin (@var{conn}, @var{lefttablename}, @var{righttablename}, "Keys", @var{keys}, @dots{})
+      ## @deftypefnx {} {@var{data} =} sqlouterjoin (@var{conn}, @var{lefttablename}, @var{righttablename}, "LeftKeys", @var{keys}, "RightKeys", @var{keys}, @dots{})
       ## Perform an outerjoin on two tables.
       ## 
       ## Performs an outerjoin equivalent to 'SELECT * from lefttable OUTER JOIN righttable ON lefttable.key = rightable.key'.
       ##
       ## @subsubheading Inputs
       ## @table @asis
-      ## @item @var{db}
+      ## @item @var{conn}
       ## Previously created connection object
       ## @item @var{lefttablename}
       ## Name of lefthand table
@@ -324,16 +324,16 @@ classdef connection < handle
     
     function data = sqlinnerjoin (this, lefttable, righttable, varargin)
       ## -*- texinfo -*-
-      ## @deftypefn {} {@var{data} =} sqlinnerjoin (@var{db}, @var{lefttablename}, @var{righttablename})
-      ## @deftypefnx {} {@var{data} =} sqlinnerjoin (@var{db}, @var{lefttablename}, @var{righttablename}, "Keys", @var{keys}, @dots{})
-      ## @deftypefnx {} {@var{data} =} sqlinnerjoin (@var{db}, @var{lefttablename}, @var{righttablename}, "LeftKeys", @var{keys}, "RightKeys", @var{keys}, @dots{})
+      ## @deftypefn {} {@var{data} =} sqlinnerjoin (@var{conn}, @var{lefttablename}, @var{righttablename})
+      ## @deftypefnx {} {@var{data} =} sqlinnerjoin (@var{conn}, @var{lefttablename}, @var{righttablename}, "Keys", @var{keys}, @dots{})
+      ## @deftypefnx {} {@var{data} =} sqlinnerjoin (@var{conn}, @var{lefttablename}, @var{righttablename}, "LeftKeys", @var{keys}, "RightKeys", @var{keys}, @dots{})
       ## Perform an innerjoin on two tables.
       ## 
       ## Performs an innerjoin equivalent to 'SELECT * from lefttable INNER JOIN righttable ON lefttable.key = rightable.key'.
       ##
       ## @subsubheading Inputs
       ## @table @asis
-      ## @item @var{db}
+      ## @item @var{conn}
       ## Previously created connection object
       ## @item @var{lefttablename}
       ## Name of lefthand table
@@ -466,9 +466,9 @@ classdef connection < handle
    
     function sqlwrite (this, tablename, data, varargin)
       ## -*- texinfo -*-
-      ## @deftypefn {} {} sqlwrite (@var{db}, @var{tablename}, @var{data})
-      ## @deftypefnx {} {} sqlwrite (@var{db}, @var{tablename}, @var{data}, @var{columntypes})
-      ## @deftypefnx {} {} sqlwrite (@var{db}, @var{tablename}, @var{data}, @var{propertyname}, @var{propertyvalue} @dots{})
+      ## @deftypefn {} {} sqlwrite (@var{conn}, @var{tablename}, @var{data})
+      ## @deftypefnx {} {} sqlwrite (@var{conn}, @var{tablename}, @var{data}, @var{columntypes})
+      ## @deftypefnx {} {} sqlwrite (@var{conn}, @var{tablename}, @var{data}, @var{propertyname}, @var{propertyvalue} @dots{})
       ## Insert rows of data into a table.
       ##
       ## Insert rows of data into a database table.
@@ -477,7 +477,7 @@ classdef connection < handle
       ##
       ## @subsubheading Inputs
       ## @table @asis
-      ## @item @var{db}
+      ## @item @var{conn}
       ## Previously created database connection object
       ## @item @var{tablename}
       ## Name of table to write data to
@@ -708,7 +708,7 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection
-      ## db = database("default", "", "");
+      ## db = mysql("MySQLNative", "root", "matlab");
       ## data = fetch(db, 'SELECT * FROM TestTable');
       ## }
       ## @end example
@@ -717,12 +717,12 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection
-      ## db = database("default", "", "");
+      ## db =  mysql("MySQLNative", "root", "matlab");
       ## data = fetch(db, 'SELECT * FROM TestTable', "MaxRows", 5);
       ## }
       ## @end example
       ##
-      ## @seealso{database, connection}
+      ## @seealso{mysql}
       ## @end deftypefn
 
       if !ischar(query)
@@ -757,7 +757,6 @@ classdef connection < handle
             error ("Expected VariableNamingRule property value to be 'preserve' or 'modify'");
           endif
           # TODO
-          #
         elseif strcmp(n, "RowFilter")
           if !isa(v, "rowfilter") && !isa(v, "dbrowfilter") && !isa(v, "mysqldb.rowfilter")
             error ("Expected RowFilter to be a rowfilter class");
@@ -817,7 +816,7 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection
-      ## db = database("default", "", "");
+      ## db =  mysql("MySQLNative", "root", "matlab");
       ## data = fetch(db, 'SELECT * FROM TestTable');
       ## }
       ## @end example
@@ -826,12 +825,12 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection
-      ## db = database("default", "", "");
+      ## db =  mysql("MySQLNative", "root", "matlab");
       ## data = fetch(db, 'SELECT * FROM TestTable', "MaxRows", 5);
       ## }
       ## @end example
       ##
-      ## @seealso{database, connection}
+      ## @seealso{mysql}
       ## @end deftypefn
 
       # TODO: verify statement is SELECT ... ?
@@ -859,14 +858,14 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection
-      ## db = database("default", "", "");
+      ## db =  mysql("MySQLNative", "root", "matlab");
       ## # create table and then insert a row
       ## execute(db, 'CREATE TABLE Test (Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT)');
       ## execute(db, 'INSERT INTO Test (Name) VALUES ("Line1")');
       ## }
       ## @end example
       ##
-      ## @seealso{database, fetch}
+      ## @seealso{mysql, fetch}
       ## @end deftypefn
       _run(this, sqlquery);
     endfunction
@@ -909,7 +908,7 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection to an existing database
-      ## db = database("default", "", "");
+      ## db =  mysql("MySQLNative", "root", "matlab");
       ## data = sqlread(db, 'TestTable');
       ## }
       ## @end example
@@ -918,12 +917,12 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection
-      ## db = database("default", "", "");
+      ## db =  mysql("MySQLNative", "root", "matlab");
       ## data = sqlread(db, 'TestTable', "MaxRows", 5);
       ## }
       ## @end example
       ##
-      ## @seealso{database, fetch}
+      ## @seealso{mysql, fetch}
       ## @end deftypefn
 
       if nargin < 2 || !ischar(tablename)
@@ -978,7 +977,7 @@ classdef connection < handle
       __mysql_rollback__(this.dbhandle);
     endfunction
 
-    function update(conn,tablename,colnames,data,whereclause)
+    function update(this, tablename, colnames, data, whereclause)
       ## -*- texinfo -*-
       ## @deftypefn {} {} update (@var{conn}, @var{tablename}, @var{colnames}, @var{data}, @var{whereclause})
       ## Update columns in database.
@@ -1005,14 +1004,14 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection
-      ## db = database("default", "", "");
+      ## db =  mysql("MySQLNative", "root", "matlab");
       ## # update name where Id > 1
       ## t = table(['Name3'], 'VariableNames', @{'Name'@});
       ## update(db, "Test", t, "WHERE Id > 1");
       ## }
       ## @end example
       ##
-      ## @seealso{sqlupdate}
+      ## @seealso{mysql, sqlupdate}
       ## @end deftypefn
  
       sqlquery = "";
@@ -1068,19 +1067,19 @@ classdef connection < handle
 
       sql = [sql " " whereclause ";"];
  
-      execute(conn, sql);
+      execute(this, sql);
  
     endfunction
 
-    function sqlupdate(conn, tablename, data, filter, varargin)
+    function sqlupdate(this, tablename, data, filter, varargin)
       ## -*- texinfo -*-
-      ## @deftypefn {} {} sqlupdate (@var{db}, @var{tablename}, @var{data}, @var{filter})
-      ## @deftypefnx {} {} sqlupdate (@var{db}, @var{tablename}, @var{data}, @var{filter}, @var{propertyname}, @var{propertyvalue} @dots{})
+      ## @deftypefn {} {} sqlupdate (@var{conn}, @var{tablename}, @var{data}, @var{filter})
+      ## @deftypefnx {} {} sqlupdate (@var{conn}, @var{tablename}, @var{data}, @var{filter}, @var{propertyname}, @var{propertyvalue} @dots{})
       ## Update rows of data in database.
       ##
       ## @subsubheading Inputs
       ## @table @asis
-      ## @item @var{db}
+      ## @item @var{conn}
       ## Previously created database connection object
       ## @item @var{tablename}
       ## Name of table to write data to
@@ -1106,7 +1105,7 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection
-      ## db = database("default", "", "");
+      ## db =  mysql("MySQLNative", "root", "matlab");
       ## # make a filter to select what to update
       ## rf = rowfilter(@{'Id'@});
       ## rf = rf.Id > 1;
@@ -1116,7 +1115,7 @@ classdef connection < handle
       ## }
       ## @end example
       ##
-      ## @seealso{update}
+      ## @seealso{mysql, update}
       ## @end deftypefn
  
       sqlquery = "";
@@ -1154,19 +1153,19 @@ classdef connection < handle
         endif
       endfor
 
-      update(conn, tablename, cols, data, ["WHERE " char(filter)]);
+      update(this, tablename, cols, data, ["WHERE " char(filter)]);
     endfunction
 
     function data = sqlfind (this, pattern, varargin)
       ## -*- texinfo -*-
-      ## @deftypefn {} {@var{data} =} sqlfind (@var{db}, @var{pattern})
-      ## @deftypefnx {} {@var{data} =} sqlfind (@var{db}, @var{pattern}, @var{propertyname}, @var{propertyvalue} @dots{})
+      ## @deftypefn {} {@var{data} =} sqlfind (@var{conn}, @var{pattern})
+      ## @deftypefnx {} {@var{data} =} sqlfind (@var{conn}, @var{pattern}, @var{propertyname}, @var{propertyvalue} @dots{})
       ## Find information about table types in a database.
       ##
       ## @subsubheading Inputs
       ## @table @asis
-      ## @item @var{db}
-      ##  currently open database.
+      ## @item @var{conn}
+      ##  currently open database connection.
       ## @item @var{pattern}
       ##  Name or pattern to match table in database. Use '' to match match all tables.
       ## @item @var{propertyname}, @var{propertyvalue}
@@ -1178,8 +1177,6 @@ classdef connection < handle
       ##   schema value to match
       ##  @end table
       ## @end table
-      ##
-      ## Note: currently the property values are not used in the filter process.
       ##
       ## @subsubheading Outputs
       ## @table @asis
@@ -1193,7 +1190,7 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection to an existing database
-      ## db = database("default", "", "");
+      ## db =  mysql("MySQLNative", "root", "matlab");
       ## # list all tables
       ## data = sqlfind(db, '');
       ## }
@@ -1203,13 +1200,13 @@ classdef connection < handle
       ## @example
       ## @code {
       ## # create sql connection
-      ## db = database("default", "", "");
+      ## db =  mysql("MySQLNative", "root", "matlab");
       ## # list matching tables
       ## data = sqlfind(db, 'TestTable');
       ## }
       ## @end example
       ##
-      ## @seealso{database, sqlread}
+      ## @seealso{mysql, sqlread}
       ## @end deftypefn
 
       if numel(varargin) > 0
