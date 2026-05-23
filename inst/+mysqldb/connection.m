@@ -1219,7 +1219,7 @@ classdef connection < handle
       endif
 
       catalog = "";
-      schema = ""
+      schema = "";
 
       for idx=1:2:numel(varargin)
         n = varargin{idx};
@@ -1242,7 +1242,7 @@ classdef connection < handle
       # TODO: needs columns names added
       query = "SELECT TABLE_CATALOG AS Catalog,TABLE_SCHEMA AS Schema,TABLE_NAME AS 'Table',TABLE_TYPE AS Type FROM INFORMATION_SCHEMA.TABLES";
 
-      filter = {}
+      filter = {};
       if !isempty(pattern)
         filter{end+1} = ["TABLE_NAME LIKE '%" pattern "%'"];
       endif
@@ -1257,7 +1257,7 @@ classdef connection < handle
         query = [query " WHERE " strjoin(filter," AND ")];
       endif
  
-      query = [query " ORDER BY TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME"]
+      query = [query " ORDER BY TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME"];
 
       data = select(this, query);
     endfunction
