@@ -222,7 +222,7 @@ save_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $MYSQL_CFLAGS"
 
 dnl Verify mysql.h can be included
-AC_CHECK_HEADER([mysql.h], [have_mysql_h="yes"], [have_mysql_h="no"])
+AC_CHECK_HEADERS([mysql.h])
 
 dnl Restore previous compilation flags
 CPPFLAGS="$save_CPPFLAGS"
@@ -233,6 +233,6 @@ AC_MSG_NOTICE([
 
 $PACKAGE_NAME is configured with:
   MySQL LIBS:   $MYSQL_LIBS
-  MYSQL CFLAGS: $MYSQL_CFLAGS
+  MySQL CFLAGS: $MYSQL_CFLAGS
 ])
 
