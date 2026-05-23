@@ -148,6 +148,7 @@ clean-tarballs:
 ##      the original working directory.
 
 $(release_tarball): $(release_stamp)
+	$(TAR) -cf - $(TAR_OPTIONS) -C "$(target_dir)/" "$(notdir $<)" | gzip -9n > "$@"
 
 $(release_stamp): $(release_dir_dep)
 	#-$(RM) -r "$@"
