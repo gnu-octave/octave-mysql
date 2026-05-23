@@ -24,8 +24,9 @@ It provides functionality for the following functions:
 ## Installing the Toolkit
 
 The toolkit can be installed in Octave 6.0 and greater.  It has a dependency 
-on the MYSQL library (<https://dev.mysql.com//>), so it must be installed in 
-order to successfully install the toolkit.
+on the MYSQL client library (<https://dev.mysql.com/>), or MariaDB Client library
+(<https://mariadb.org/>),
+so one must be installed in order to successfully install the toolkit.
 
 The toolkit can be installed in Octave 7.2+ using the command:
 
