@@ -59,6 +59,7 @@ real_target_dir  := $(realpath .)/$(target_dir)
 installation_dir := $(real_target_dir)/.installation
 package_list     := $(installation_dir)/.octave_packages
 install_stamp    := $(installation_dir)/.install_stamp
+release_stamp    := $(real_target_dir)/.release_stamp
 
 ## These can be set by environment variables which allow to easily
 ## test with different Octave versions.
@@ -145,13 +146,17 @@ clean-tarballs:
 ##    * note that if a commands needs to be run in a specific directory,
 ##      the command to "cd" needs to be on the same line.  Each line restores
 ##      the original working directory.
-$(release_dir): $(release_dir_dep)
-	-$(RM) -r "$@"
+
+$(release_tarball): $(release_stamp)
+
+$(release_stamp): $(release_dir_dep)
+	#-$(RM) -r "$@"
+	-$(RM) -r "$(release_dir)"
 ifeq (${vcs},hg)
-	hg archive --exclude ".hg*" --type files "$@"
+	hg archive --exclude ".hg*" --type files "$(release_dir)"
 endif
 ifeq (${vcs},git)
-	git archive --format=tar --prefix="$@/" HEAD | $(TAR) -x
+	git archive --format=tar --prefix="$(release_dir)/" HEAD | $(TAR) -x
 	$(RM) "$@/.gitignore"
 endif
 ## Don't fall back to run the supposed necessary contents of
@@ -160,22 +165,23 @@ endif
 ## put in the missing 'bootstrap' file if they feel they know its
 ## necessary contents.
 ifneq (,$(wildcard src/bootstrap))
-	cd "$@/src" && ./bootstrap && $(RM) -r "autom4te.cache"
+	cd "$(release_dir)/src" && ./bootstrap && $(RM) -r "autom4te.cache"
 endif
 ## Uncomment this if your src/Makefile.in has these targets for
 ## pre-building something for the release (e.g. documentation).
 ifneq (,$(wildcard src/configure))
-	cd "$@/src" && ./configure && $(MAKE) prebuild && \
+	cd "$(release_dir)/src" && ./configure && $(MAKE) prebuild && \
 	  $(MAKE) distclean && $(RM) Makefile
 endif
 ifneq (,$(wildcard doc/mkfuncdocs.py))
-	$(MAKE) -C "$@" docs
-	cd "$@" && $(RM) -f doc/mkfuncdocs.py doc/mkqhcp.py
+	$(MAKE) -C "$(release_dir)" docs
+	cd "$(release_dir)" && $(RM) -f doc/mkfuncdocs.py doc/mkqhcp.py
 endif
 ifneq (,$(wildcard doc/mkdoccache.m))
-	$(MAKE) -C "$@" doc-cache
+	$(MAKE) -C "$(release_dir)" doc-cache
 endif
-	${FIX_PERMISSIONS} "$@"
+	${FIX_PERMISSIONS} "$(release_dir)"
+	touch $@
 
 run_in_place = $(OCTAVE) --eval ' pkg ("local_list", "$(package_list)"); ' \
                          --eval ' pkg ("load", "$(package)"); '
@@ -193,7 +199,7 @@ $(html_dir): $(install_stamp)
 
 clean-unpacked-release:
 	@echo "## Cleaning unpacked release tarballs (package + html)..."
-	-$(RM) -r $(release_dir) $(html_dir)
+	-$(RM) -r $(release_dir) $(html_dir) $(release_stamp)
 	@echo
 
 ##
@@ -220,7 +226,7 @@ install: $(release_tarball)
 	touch $(install_stamp)
 
 ## Install only if installation (under target/...) is not current.
-$(install_stamp): $(release_tarball)
+$(install_stamp): $(release_tarball) $(release_stamp)
 	@echo "Installing package under $(installation_dir) ..."
 	$(OCTAVE) --no-gui --eval $(octave_install_commands)
 	touch $(install_stamp)
