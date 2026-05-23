@@ -246,11 +246,16 @@ classdef connection < handle
       endfor
  
       where_cnt = 0;
-      sqlquery = sprintf("SELECT * FROM %s FULL OUTER JOIN %s ON ", lefttable, righttable);
+
+      # mysql doesnt suppprt: SELECT * FROM TestTable FULL OUTER JOIN TestX ON TestTable.Id = TestX.Id
+      # so need union left and right
+      lsqlquery = sprintf("SELECT * FROM %s LEFT JOIN %s ON ", lefttable, righttable);
+      rsqlquery = sprintf("SELECT * FROM %s RIGHT JOIN %s ON ", lefttable, righttable);
+      onquery = "";
 
       if isempty(keys) && isempty(leftkeys) && isempty(rightkeys)
-        ldata = _run(this, sprintf("SELECT * FROM '%s' LIMIT 1",  lefttable), "structure");
-        rdata = _run(this, sprintf("SELECT * FROM '%s' LIMIT 1",  righttable), "structure");
+        ldata = _run(this, sprintf("SELECT * FROM `%s` LIMIT 1",  lefttable), "structure");
+        rdata = _run(this, sprintf("SELECT * FROM `%s` LIMIT 1",  righttable), "structure");
 
         lcols = fieldnames(ldata);
         rcols = fieldnames(rdata);
@@ -259,9 +264,9 @@ classdef connection < handle
           z = ismember(lcols{idx}, rcols);
           if sum(z) > 0
             if where_cnt > 0
-              sqlquery = [sqlquery " AND "];
+              onquery = [onquery " AND "];
             endif
-            sqlquery = [sqlquery sprintf("%s.%s = %s.%s", lefttable, lcols{idx}, righttable, lcols{idx})];
+            onquery = [onquery sprintf("%s.%s = %s.%s", lefttable, lcols{idx}, righttable, lcols{idx})];
             where_cnt = where_cnt + 1;
           endif
         endfor
@@ -278,9 +283,9 @@ classdef connection < handle
         endif
         for idx=1:length(keys)
           if where_cnt > 0
-            sqlquery = [sqlquery " AND "];
+            onquery = [onquery " AND "];
           endif
-          sqlquery = [sqlquery sprintf("%s.%s = %s.%s", lefttable, keys{idx}, righttable, keys{idx})];
+          onquery = [onquery sprintf("%s.%s = %s.%s", lefttable, keys{idx}, righttable, keys{idx})];
           where_cnt = where_cnt + 1;
         endfor
       elseif isempty(keys) && !isempty(leftkeys) && !isempty(rightkeys)
@@ -300,9 +305,9 @@ classdef connection < handle
 
         for idx=1:length(leftkeys)
           if where_cnt > 0
-            sqlquery = [sqlquery " AND "];
+            onquery = [onquery " AND "];
           endif
-          sqlquery = [sqlquery sprintf("%s.%s = %s.%s", lefttable, leftkeys{idx}, righttable, rightkeys{idx})];
+          onquery = [onquery sprintf("%s.%s = %s.%s", lefttable, leftkeys{idx}, righttable, rightkeys{idx})];
           where_cnt = where_cnt + 1;
         endfor
       else
@@ -313,6 +318,7 @@ classdef connection < handle
         error ("no constraint columns specified in keys");
       endif
 
+      sqlquery = [lsqlquery onquery " UNION " rsqlquery onquery];
       data = fetch(this, sqlquery, passon_args{:});
     endfunction
     
@@ -391,8 +397,8 @@ classdef connection < handle
       sqlquery = sprintf("SELECT * FROM %s INNER JOIN %s ON ", lefttable, righttable);
 
       if isempty(keys) && isempty(leftkeys) && isempty(rightkeys)
-        ldata = _run(this, sprintf("SELECT * FROM '%s' LIMIT 1",  lefttable), "structure");
-        rdata = _run(this, sprintf("SELECT * FROM '%s' LIMIT 1",  righttable), "structure");
+        ldata = _run(this, sprintf("SELECT * FROM `%s` LIMIT 1",  lefttable), "structure");
+        rdata = _run(this, sprintf("SELECT * FROM `%s` LIMIT 1",  righttable), "structure");
 
         lcols = fieldnames(ldata);
         rcols = fieldnames(rdata);
@@ -1379,6 +1385,8 @@ endclassdef
 %! db.execute("INSERT INTO TestTable (Id,Name) VALUES (3, 'Name3');");
 %! db.execute("CREATE TEMPORARY TABLE TestX (Id INT NOT NULL PRIMARY KEY, Author VARCHAR(255));");
 %! db.execute("INSERT INTO TestX (Id,Author) VALUES (1, 'Author1');");
+%! db.execute("DROP TABLE IF EXISTS OctaveTestnodata;");
+%! db.execute("DROP TABLE IF EXISTS OctaveTest1;");
 %! endif
 
 %!xtest
@@ -1414,15 +1422,15 @@ endclassdef
 
 %!xtest
 %! t = struct("Id", [1;2], "Name", ['Name1';'Name2']);
-%! sqlwrite(db, "Test1", t);
-%! tbl = sqlread(db , "Test1", "DataReturnFormat", "structure");
+%! sqlwrite(db, "OctaveTest1", t);
+%! tbl = sqlread(db , "OctaveTest1", "DataReturnFormat", "structure");
 %! assert([size(fieldnames(tbl),1), size(tbl.Id,1)], [2 2]);
 
 %!xtest
 %! # write no data but have columns
 %! t = struct("Id", [], "Name", []);
-%! sqlwrite(db, "Testnodata", t);
-%! tbl = sqlread(db , "Testnodata", "DataReturnFormat", "structure");
+%! sqlwrite(db, "OctaveTestnodata", t);
+%! tbl = sqlread(db , "OctaveTestnodata", "DataReturnFormat", "structure");
 %! assert([size(fieldnames(tbl),1), size(tbl.Id,1)], [2 0]);
 
 %!xtest

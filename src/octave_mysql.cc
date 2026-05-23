@@ -158,7 +158,6 @@ octave_mysql::subsasgn (const std::string& type, const std::list<octave_value_li
                     rc = mysql_autocommit(dbc, 0);
 		  else
                     rc = mysql_autocommit(dbc, 1);
-
 		  if (rc == 0)
                     autocommit = newautocommit;
                 }
@@ -181,7 +180,7 @@ octave_mysql::create (
   const std::string &hostname, int port, const std::string &username, const std::string &password,
   const std::string database, int flags, unsigned int to)
 {
-  autocommit = "off";
+  autocommit = "on";
   timeout = to;
 
   // Initialize MySQL handle
@@ -189,8 +188,8 @@ octave_mysql::create (
 
   if (!conn)
     {
-      std::cerr << "mysql_init() failed" << std::endl;
-      return EXIT_FAILURE;
+      message = "Failed to initialize connection";
+      return false;
     }
 
   mysql_options(conn,
@@ -215,20 +214,20 @@ octave_mysql::create (
   else
     {
       dbc = conn;
-    }
 
-  db_ver = mysql_get_server_info(conn);
-  if (db_ver.find("Maria") != std::string::npos)
-    db_name = "MariaDB";
-  else
-    db_name = "MySQL";
+      db_ver = mysql_get_server_info(conn);
+      if (db_ver.find("Maria") != std::string::npos)
+        db_name = "MariaDB";
+      else
+        db_name = "MySQL";
 #ifdef LIBMARIADB
-  db_driver_name = "MariaDB Connector/C";
+      db_driver_name = "MariaDB Connector/C";
 #else
-  db_driver_name = "MySQL Connector/C";
+      db_driver_name = "MySQL Connector/C";
 #endif
-  db_driver_ver = mysql_get_client_info();
+      db_driver_ver = mysql_get_client_info();
 
+    }
   return result != 0;
 }
 
