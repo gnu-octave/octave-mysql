@@ -1507,6 +1507,13 @@ endclassdef
 %! assert([size(fieldnames(tbl),1), size(tbl.Id,1)], [2 4]);
 %! db.AutoCommit = 'off';
 
+%!xtest
+%! # sqlfind
+%! tbl = sqlfind(db, "");
+%! assert(!isempty(tbl));
+%! tbl = sqlfind(db, "", "Catalog", "expectNoMatch");
+%! assert(isempty(tbl));
+
 %!test
 %! # test close
 %! if !isempty(db)
