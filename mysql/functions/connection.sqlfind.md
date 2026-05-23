@@ -1,0 +1,101 @@
+---
+layout: "default"
+permalink: "/functions/18_connectionsqlfind/"
+pkg_name: "mysql"
+pkg_version: "0.0.1"
+pkg_description: "Basic Octave implementation of MySQL toolkit"
+title: "Mysql Toolkit - connection.sqlfind"
+category: "Support Functions"
+func_name: "connection.sqlfind"
+navigation:
+- id: "overview"
+  name: "Overview"
+  url: "/index"
+- id: "Functions"
+  name: "Function Reference"
+  url: "/functions"
+- id: "16_MYSQLconnection"
+  name: "&nbsp;&nbsp;MYSQL connection"
+  url: "/functions/#16_MYSQLconnection"
+  subitems:
+- id: "14_ImportingData"
+  name: "&nbsp;&nbsp;Importing Data"
+  url: "/functions/#14_ImportingData"
+  subitems:
+- id: "14_ExportingData"
+  name: "&nbsp;&nbsp;Exporting Data"
+  url: "/functions/#14_ExportingData"
+  subitems:
+- id: "19_DatabaseOperations"
+  name: "&nbsp;&nbsp;Database Operations"
+  url: "/functions/#19_DatabaseOperations"
+  subitems:
+- id: "17_SupportFunctions"
+  name: "&nbsp;&nbsp;Support Functions"
+  url: "/functions/#17_SupportFunctions"
+  subitems:
+- id: "news"
+  name: "News"
+  url: "/news"
+- id: "manual"
+  name: "Manual"
+  url: "/manual"
+---
+<dl class="first-deftypefn def-block">
+<dt class="deftypefn def-line" id="index-sqlfind"><span><code class="def-type"><var class="var">data</var> =</code> <strong class="def-name">sqlfind</strong> <code class="def-code-arguments">(<var class="var">conn</var>, <var class="var">pattern</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-sqlfind-1"><span><code class="def-type"><var class="var">data</var> =</code> <strong class="def-name">sqlfind</strong> <code class="def-code-arguments">(<var class="var">conn</var>, <var class="var">pattern</var>, <var class="var">propertyname</var>, <var class="var">propertyvalue</var> &hellip;)</code></span></dt>
+<dd><p>Find information about table types in a database.
+</p>
+<h4 class="subsubheading" id="Inputs"><span>Inputs</span></h4>
+<dl class="table">
+<dt><var class="var">conn</var></dt>
+<dd><p>currently open database connection.
+ </p></dd>
+<dt><var class="var">pattern</var></dt>
+<dd><p>Name or pattern to match table in database. Use &rdquo; to match all tables.
+ </p></dd>
+<dt><var class="var">propertyname</var>, <var class="var">propertyvalue</var></dt>
+<dd><p>property name/value pairs where known properties are:
+  </p><dl class="table">
+<dt>Catalog</dt>
+<dd><p>catalog value to match
+  </p></dd>
+<dt>Schema</dt>
+<dd><p>schema value to match
+  </p></dd>
+</dl>
+</dd>
+</dl>
+
+<h4 class="subsubheading" id="Outputs"><span>Outputs</span></h4>
+<dl class="table">
+<dt><var class="var">data</var></dt>
+<dd><p>a table containing the query result. Table columns are
+ &rsquo;Catalog&rsquo;, &rsquo;Schema&rsquo;, &rsquo;Table&rsquo;, &rsquo;Columns&rsquo;, &rsquo;Type&rsquo;.
+ </p></dd>
+</dl>
+
+<h4 class="subsubheading" id="Examples"><span>Examples</span></h4>
+<p>Show all tables in the database.
+ </p><div class="example">
+<pre class="example-preformatted"> <code class="code">
+ # create sql connection to an existing database
+ db =  mysql(&quot;MySQLNative&quot;, &quot;root&quot;, &quot;matlab&quot;);
+ # list all tables
+ data = sqlfind(db, '');
+ </code>
+ </pre></div>
+
+<p>Show information about TestTable
+ </p><div class="example">
+<pre class="example-preformatted"> <code class="code">
+ # create sql connection
+ db =  mysql(&quot;MySQLNative&quot;, &quot;root&quot;, &quot;matlab&quot;);
+ # list matching tables
+ data = sqlfind(db, 'TestTable');
+ </code>
+ </pre></div>
+
+
+<p><strong class="strong">See also:</strong> mysql, sqlread.
+ </p></dd></dl>

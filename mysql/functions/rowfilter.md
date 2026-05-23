@@ -1,0 +1,82 @@
+---
+layout: "default"
+permalink: "/functions/9_rowfilter/"
+pkg_name: "mysql"
+pkg_version: "0.0.1"
+pkg_description: "Basic Octave implementation of MySQL toolkit"
+title: "Mysql Toolkit - rowfilter"
+category: "Support Functions"
+func_name: "rowfilter"
+navigation:
+- id: "overview"
+  name: "Overview"
+  url: "/index"
+- id: "Functions"
+  name: "Function Reference"
+  url: "/functions"
+- id: "16_MYSQLconnection"
+  name: "&nbsp;&nbsp;MYSQL connection"
+  url: "/functions/#16_MYSQLconnection"
+  subitems:
+- id: "14_ImportingData"
+  name: "&nbsp;&nbsp;Importing Data"
+  url: "/functions/#14_ImportingData"
+  subitems:
+- id: "14_ExportingData"
+  name: "&nbsp;&nbsp;Exporting Data"
+  url: "/functions/#14_ExportingData"
+  subitems:
+- id: "19_DatabaseOperations"
+  name: "&nbsp;&nbsp;Database Operations"
+  url: "/functions/#19_DatabaseOperations"
+  subitems:
+- id: "17_SupportFunctions"
+  name: "&nbsp;&nbsp;Support Functions"
+  url: "/functions/#17_SupportFunctions"
+  subitems:
+- id: "news"
+  name: "News"
+  url: "/news"
+- id: "manual"
+  name: "Manual"
+  url: "/manual"
+---
+<dl class="first-deftypefn def-block">
+<dt class="deftypefn def-line" id="index-rowfilter_0028C_0029"><span><code class="def-type"><var class="var">rowfilt</var> =</code> <strong class="def-name">rowfilter(<var class="var">C</var>)</strong></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-rowfilter_0028T_0029"><span><code class="def-type"><var class="var">rowfilt</var> =</code> <strong class="def-name">rowfilter(<var class="var">T</var>)</strong></span></dt>
+<dd><p>Create an unconstrained rowfilter object with columns names.
+</p>
+<h4 class="subsubheading" id="Inputs"><span>Inputs</span></h4>
+<dl class="table">
+<dt><var class="var">C</var></dt>
+<dd><p>A column name, cell array of column names.
+ </p></dd>
+<dt><var class="var">T</var></dt>
+<dd><p>A table to use for column names.
+ </p></dd>
+</dl>
+
+<h4 class="subsubheading" id="Outputs"><span>Outputs</span></h4>
+<dl class="table">
+<dt><var class="var">rowfilt</var></dt>
+<dd><p>a rowfilter object
+ </p></dd>
+</dl>
+
+<h4 class="subsubheading" id="Object-Properties"><span>Object Properties</span></h4>
+<p>Object properties are the names of the columns on creation of the filter.
+</p>
+<p>Constraints can be set on a specific field of the filter by setting a
+ comparison value for the variable.
+</p>
+<h4 class="subsubheading" id="Examples"><span>Examples</span></h4>
+<div class="example">
+<pre class="example-preformatted"> <code class="code">
+ # create a rowfilter with 2 columns
+ rf = rowfilter({'Column1', 'Column2'});
+ # add a constraint for Column1 &gt; 10
+ rfc = rf.Column1 &gt; 10
+ </code>
+ </pre></div>
+
+</dd></dl>

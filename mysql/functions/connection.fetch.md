@@ -1,0 +1,100 @@
+---
+layout: "default"
+permalink: "/functions/16_connectionfetch/"
+pkg_name: "mysql"
+pkg_version: "0.0.1"
+pkg_description: "Basic Octave implementation of MySQL toolkit"
+title: "Mysql Toolkit - connection.fetch"
+category: "Support Functions"
+func_name: "connection.fetch"
+navigation:
+- id: "overview"
+  name: "Overview"
+  url: "/index"
+- id: "Functions"
+  name: "Function Reference"
+  url: "/functions"
+- id: "16_MYSQLconnection"
+  name: "&nbsp;&nbsp;MYSQL connection"
+  url: "/functions/#16_MYSQLconnection"
+  subitems:
+- id: "14_ImportingData"
+  name: "&nbsp;&nbsp;Importing Data"
+  url: "/functions/#14_ImportingData"
+  subitems:
+- id: "14_ExportingData"
+  name: "&nbsp;&nbsp;Exporting Data"
+  url: "/functions/#14_ExportingData"
+  subitems:
+- id: "19_DatabaseOperations"
+  name: "&nbsp;&nbsp;Database Operations"
+  url: "/functions/#19_DatabaseOperations"
+  subitems:
+- id: "17_SupportFunctions"
+  name: "&nbsp;&nbsp;Support Functions"
+  url: "/functions/#17_SupportFunctions"
+  subitems:
+- id: "news"
+  name: "News"
+  url: "/news"
+- id: "manual"
+  name: "Manual"
+  url: "/manual"
+---
+<dl class="first-deftypefn def-block">
+<dt class="deftypefn def-line" id="index-fetch"><span><code class="def-type"><var class="var">data</var> =</code> <strong class="def-name">fetch</strong> <code class="def-code-arguments">(<var class="var">conn</var>, <var class="var">query</var>)</code></span></dt>
+<dt class="deftypefnx def-cmd-deftypefn def-line" id="index-fetch-1"><span><code class="def-type"><var class="var">data</var> =</code> <strong class="def-name">fetch</strong> <code class="def-code-arguments">(<var class="var">conn</var>, <var class="var">query</var>, <var class="var">propertyname</var>, <var class="var">propertyvalue</var> &hellip;)</code></span></dt>
+<dd><p>Perform SQL query <var class="var">query</var>, and return result
+ </p><h4 class="subsubheading" id="Inputs"><span>Inputs</span></h4>
+<dl class="table">
+<dt><var class="var">conn</var></dt>
+<dd><p>currently open database connection.
+ </p></dd>
+<dt><var class="var">sqlquery</var></dt>
+<dd><p>String containing a valid select SQL query.
+ </p></dd>
+<dt><var class="var">propertyname</var>, <var class="var">propertyvalue</var></dt>
+<dd><p>property name/value pairs where known properties are:
+  </p><dl class="table">
+<dt>MaxRows</dt>
+<dd><p>Integer value of max number of rows in the query
+  </p></dd>
+<dt>VariableNamingRule</dt>
+<dd><p>String value &rsquo;preserve&rsquo; (default) or &rsquo;modify&rsquo; to flag renaming of variable names (currently ignored)
+  </p></dd>
+<dt>RowFilter</dt>
+<dd><p>rowfilter object to filter results
+  </p></dd>
+</dl>
+</dd>
+</dl>
+
+<h4 class="subsubheading" id="Outputs"><span>Outputs</span></h4>
+<dl class="table">
+<dt><var class="var">data</var></dt>
+<dd><p>a table containing the query result.
+ </p></dd>
+</dl>
+
+<h4 class="subsubheading" id="Examples"><span>Examples</span></h4>
+<p>Select all rows of data from a database tables
+ </p><div class="example">
+<pre class="example-preformatted"> <code class="code">
+ # create sql connection
+ db = mysql(&quot;MySQLNative&quot;, &quot;root&quot;, &quot;matlab&quot;);
+ data = fetch(db, 'SELECT * FROM TestTable');
+ </code>
+ </pre></div>
+
+<p>Select 5 rows of data from a database tables
+ </p><div class="example">
+<pre class="example-preformatted"> <code class="code">
+ # create sql connection
+ db =  mysql(&quot;MySQLNative&quot;, &quot;root&quot;, &quot;matlab&quot;);
+ data = fetch(db, 'SELECT * FROM TestTable', &quot;MaxRows&quot;, 5);
+ </code>
+ </pre></div>
+
+
+<p><strong class="strong">See also:</strong> mysql.
+ </p></dd></dl>
