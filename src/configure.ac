@@ -168,14 +168,51 @@ CXXFLAGS=$save_CXXFLAGS
 LIBS="$save_LIBS"
 LDFLAGS="$save_LDFLAGS"
 
-# mysqlclient
-AC_CHECK_TOOL([MYSQL_CONFIG], [mysql_config], [none])
-if [ test "x$MYSQL_CONFIG" = "xnone" ]; then
-  AC_MSG_ERROR([*** 'mkoctfile' not found.])
+PKG_PROG_PKG_CONFIG
+
+have_mysql=no
+if test "x$PKG_CONFIG" != "x"; then
+  AC_MSG_CHECKING([pkg-config for libmariadb or mysqlclient])
+
+  PKG_CHECK_EXISTS([libmariadb], [
+    MYSQL_CFLAGS=`$PKG_CONFIG --cflags libmariadb`
+    MYSQL_LIBS=`$PKG_CONFIG --libs libmariadb`
+    have_mysql=yes
+  ], [
+    PKG_CHECK_EXISTS([mysqlclient], [
+      MYSQL_CFLAGS=`$PKG_CONFIG --cflags mysqlclient`
+      MYSQL_LIBS=`$PKG_CONFIG --libs mysqlclient`
+      have_mysql=yes
+    ])
+  ])
+  AC_MSG_RESULT($have_mysql)
 fi
 
-MYSQL_CFLAGS=`$MYSQL_CONFIG --cflags`
-MYSQL_LIBS=`$MYSQL_CONFIG --libs`
+# fallover check for mariadb_config
+if test "x$have_mysql" != "xyes"; then
+  # mariadb
+  AC_CHECK_TOOL([MARIADB_CONFIG], [mariadb_config], [none])
+  if [ test "x$MARIADB_CONFIG" != "xnone" ]; then
+    have_mysql=yes
+    MYSQL_CFLAGS=`$MARIADB_CONFIG --cflags`
+    MYSQL_LIBS=`$MARIADB_CONFIG --libs`
+  fi
+fi
+
+# fallover check for mysql_config
+if test "x$have_mysql" != "xyes"; then
+  # mysqlclient
+  AC_CHECK_TOOL([MYSQL_CONFIG], [mysql_config], [none])
+  if [ test "x$MYSQL_CONFIG" != "xnone" ]; then
+    have_mysql=yes
+    MYSQL_CFLAGS=`$MYSQL_CONFIG --cflags`
+    MYSQL_LIBS=`$MYSQL_CONFIG --libs`
+  fi
+fi
+
+if [ test "x$have_mysql" != "xyes" ]; then
+  AC_MSG_ERROR([*** mariadb or mysql library information not found.])
+fi
 
 AC_SUBST([MYSQL_CFLAGS])
 AC_SUBST([MYSQL_LIBS])
