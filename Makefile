@@ -43,6 +43,7 @@ $(TR) '[:upper:]' '[:lower:]')
 packageprefix := octave-
 version := $(shell $(GREP) "^Version: " DESCRIPTION | $(CUT) -f2 -d" ")
 pkg_date := $(shell $(GREP) "^Date: " DESCRIPTION | $(CUT) -f2 -d" ")
+pkg_year := $(shell $(GREP) "^Date: " DESCRIPTION | $(CUT) -f2 -d" " | $(CUT) -f1 -d"-")
 
 ## These are the paths that will be created for the releases.
 target_dir       := target
@@ -286,6 +287,7 @@ doc/version.texi: $(release_dir_dep)
 	@echo "@set VERSION $(version)" >> $@
 	@echo "@set PACKAGE $(package)" >> $@
 	@echo "@set DATE $(pkg_date)" >> $@
+	@echo "@set YEAR $(pkg_year)" >> $@
 
 doc/$(packageprefix)$(package).pdf: doc/$(packageprefix)$(package).texi doc/functions.texi doc/version.texi
 	cd doc && SOURCE_DATE_EPOCH=$(REPO_TIMESTAMP) $(TEXI2PDF) $(packageprefix)$(package).texi
@@ -296,7 +298,7 @@ doc/$(packageprefix)$(package).html: doc/$(packageprefix)$(package).texi doc/fun
 	cd doc && SOURCE_DATE_EPOCH=$(REPO_TIMESTAMP) $(MAKEINFO) --html --css-ref=octave.css  $(MAKEINFO_HTML_OPTIONS) -o - $(packageprefix)$(package).texi | $(MAKEINFO_HTML_FILTER) > $(packageprefix)$(package).html
 
 doc/functions.texi: $(release_dir_dep)
-	cd doc && ./mkfuncdocs.py --src-dir=../inst/ ../INDEX | $(SED) 's/@seealso/@xseealso/g' > functions.texi
+	cd doc && ./mkfuncdocs.py --src-dir=../inst/ --src-dir=../inst/+mysqldb/ ../INDEX | $(SED) 's/@seealso/@xseealso/g' > functions.texi
 
 doc/$(packageprefix)$(package).qhc: doc/$(packageprefix)$(package).html
 	# try also create qch file if can
