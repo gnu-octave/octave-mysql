@@ -39,3 +39,7 @@ function __unload_mysql__ ()
   end_try_catch
 
 endfunction
+
+%!test
+%! # private load function - no test
+
